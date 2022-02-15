@@ -1,3 +1,4 @@
+
 resource "azurerm_kubernetes_cluster" "default" {
   name                = var.cluster_name
   location            = "East US"

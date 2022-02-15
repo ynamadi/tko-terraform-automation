@@ -1,5 +1,4 @@
 #!/bin/sh
-curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 SUBSCRIPTION_ID=$(az account show --query id)
 SUBSCRIPTION_ID="${SUBSCRIPTION_ID%\"}"
 SUBSCRIPTION_ID="${SUBSCRIPTION_ID#\"}"
