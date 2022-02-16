@@ -1,12 +1,13 @@
 
 resource "azurerm_kubernetes_cluster" "default" {
+  depends_on = [azurerm_resource_group.default]
   name                = var.cluster_name
   location            = "East US"
-  resource_group_name = "${var.cluster_name}-rg"
+  resource_group_name = azurerm_resource_group.default.name
   dns_prefix          = "${var.cluster_name}-k8s"
 
   default_node_pool {
-    name            = "${var.cluster_name}-np"
+    name            = "nodepool1"
     node_count      = 1
     vm_size         = "Standard_D2_v2"
     os_disk_size_gb = 30
