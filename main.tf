@@ -1,14 +1,18 @@
 # Create a resource group
-resource "azurerm_resource_group" "example" {
-  name     = "default"
+resource "azurerm_resource_group" "default" {
+  name     = "${var.cluster_name}-rg"
   location = "East US"
+
+  tags = {
+    environment = "Demo"
+  }
 }
 
-resource "azurerm_user_assigned_identity" "example" {
-  resource_group_name = azurerm_resource_group.example.name
-  location            = azurerm_resource_group.example.location
+resource "azurerm_user_assigned_identity" "default" {
+  resource_group_name = azurerm_resource_group.default.name
+  location            = azurerm_resource_group.default.location
 
-  name = "default"
+  name = "${var.cluster_name}_identify"
 }
 
 
