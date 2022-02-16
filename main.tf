@@ -1,3 +1,20 @@
+# Create a resource group
+resource "azurerm_resource_group" "default" {
+  name     = "${var.cluster_name}-rg"
+  location = "East US"
+
+  tags = {
+    environment = "Demo"
+  }
+}
+
+resource "azurerm_user_assigned_identity" "default" {
+  resource_group_name = azurerm_resource_group.default.name
+  location            = azurerm_resource_group.default.location
+
+  name = "${var.cluster_name}_identify"
+}
+
 
 resource "azurerm_kubernetes_cluster" "default" {
   depends_on = [azurerm_resource_group.default]
