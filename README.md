@@ -1,6 +1,25 @@
 # Attaching an AKS Cluster to Tanzu Mission Control
 
 This script is designed to create an AKS Cluster and attach it to Tanzu Mission Control
+####Note: TMC provider requires Terraform version 0.15 or later, the provider supports static credentials passed to the provider or environment variables.
+
+###Authenticating to TMC
+Passing the static credentials to the provider
+```terraform
+provider "tanzu-mission-control" {
+  endpoint            = "my-company.tmc.cloud.vmware.com"
+  vmw_cloud_api_token = "Super secret API Token string"
+}
+```
+
+Passing credentials via environment variable
+```shell
+export TMC_API_TOKEN="my-company.tmc.cloud.vmware.com"
+export TMC_ORG_URL="Super secret API Token string"
+```
+```terraform
+provider "tanzu-mission-control" {}
+```
 
 1. Authenticating via Azure Cli
 ```shell
