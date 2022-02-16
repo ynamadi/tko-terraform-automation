@@ -26,6 +26,24 @@ provider "azurerm" {
   tenant_id           = var.tenant
 }
 
+
+# Create a resource group
+resource "azurerm_resource_group" "default" {
+  name     = "${var.cluster_name}-rg"
+  location = "East US"
+
+  tags = {
+    environment = "Demo"
+  }
+}
+
+resource "azurerm_user_assigned_identity" "default" {
+  resource_group_name = azurerm_resource_group.default.name
+  location            = azurerm_resource_group.default.location
+
+  name = "${var.cluster_name}_identify"
+}
+
 provider "tanzu-mission-control" {
   endpoint            = var.vmw_host            # optionally use TMC_ENDPOINT env var
   vmw_cloud_api_token = var.vmw_api_token# optionally use VMW_CLOUD_API_TOKEN env var
