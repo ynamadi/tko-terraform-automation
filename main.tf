@@ -1,3 +1,16 @@
+# Create a resource group
+resource "azurerm_resource_group" "example" {
+  name     = "default"
+  location = "East US"
+}
+
+resource "azurerm_user_assigned_identity" "example" {
+  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.example.location
+
+  name = "default"
+}
+
 
 resource "azurerm_kubernetes_cluster" "default" {
   name                = var.cluster_name
@@ -26,7 +39,10 @@ resource "azurerm_kubernetes_cluster" "default" {
   }
 
   provisioner "local-exec" {
-    command = "./connect.sh"
+    command = <<-EOT
+      export CLUSTER_NAME=${var.cluster_name}
+      ./connect.sh
+    EOT
   }
 }
 
