@@ -1,13 +1,14 @@
 
 resource "azurerm_kubernetes_cluster" "default" {
+  depends_on = [azurerm_resource_group.default]
   name                = var.cluster_name
   location            = "East US"
-  resource_group_name = "default"
+  resource_group_name = azurerm_resource_group.default.name
   dns_prefix          = "${var.cluster_name}-k8s"
 
   default_node_pool {
-    name            = "default"
-    node_count      = 2
+    name            = "nodepool1"
+    node_count      = 1
     vm_size         = "Standard_D2_v2"
     os_disk_size_gb = 30
   }
@@ -26,7 +27,7 @@ resource "azurerm_kubernetes_cluster" "default" {
   }
 
   provisioner "local-exec" {
-    command = "./connect.sh"
+    command = "./connect.sh ${var.cluster_name}-rg ${var.cluster_name}"
   }
 }
 
@@ -38,7 +39,7 @@ resource "tanzu-mission-control_cluster" "attach_cluster_with_kubeconfig" {
 
 
   attach_k8s_cluster {
-    kubeconfig_file = "config.yaml" # Required
+    kubeconfig_file = "config-aks-cluster.yaml" # Required
     description     = "aks cluster"
   }
 
