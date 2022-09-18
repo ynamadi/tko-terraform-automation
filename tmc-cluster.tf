@@ -1,6 +1,6 @@
 #Creating a cluster group for all cluster belonging to Digital
 resource "tanzu-mission-control_cluster_group" "create_cluster_group_min_info" {
-  name = "digital-bu-cluster-group"
+  name = var.cluster_group_name
 }
 
 resource "tanzu-mission-control_cluster" "attach_cluster_with_kubeconfig" {
@@ -25,7 +25,7 @@ resource "tanzu-mission-control_cluster" "attach_cluster_with_kubeconfig" {
   }
 
   spec {
-    cluster_group = "digital-bu-cluster-group" # Default: default
+    cluster_group = var.cluster_group_name
   }
 
   ready_wait_timeout = "15m" # Default: waits until 3 min for the cluster to become ready

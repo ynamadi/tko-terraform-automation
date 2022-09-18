@@ -37,3 +37,9 @@ variable "cluster_name" {
   description = "AKS Cluster Name"
   default     = "test001"
 }
+
+variable "cluster_group_name" {
+  type        = string
+  description = "Logically group clusters via cluster group"
+  default     = "digital-business-unit"
+}
