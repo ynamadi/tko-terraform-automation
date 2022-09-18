@@ -30,5 +30,6 @@ override.tf.json
 /config.yaml
 /terraform.tfvars
 /.idea/
+/.terraform/
 /.terraform.lock.hcl
 /config-aks-cluster.yaml

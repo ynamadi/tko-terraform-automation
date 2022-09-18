@@ -1,17 +1,14 @@
 #!/bin/sh
-SUBSCRIPTION_ID=$(az account show --query id)
-SUBSCRIPTION_ID="${SUBSCRIPTION_ID%\"}"
-SUBSCRIPTION_ID="${SUBSCRIPTION_ID#\"}"
-az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/${SUBSCRIPTION_ID}"  -o yaml &> test.txt
-az account show --query id > account1.txt
-sed '1s/^/subscription_id = /' account1.txt > account.tfvars
-sed 's/: /\t=\t"/g' test.txt > test.tf
-sed '/^WARNING/d' test.tf > vars.tf
-sed 's/$/"/' vars.tf > tvars.tfvars
-sort -n account.tfvars tvars.tfvars > terraform.tfvars
-rm test.txt
-rm test.tf
-rm vars.tf
-rm account1.txt
-rm account.tfvars
-rm tvars.tfvars
+
+#Retrieve subscription id
+SUBSCRIPTION_ID=$(az account show --query id | tr -d '"')
+
+#Create a Service Principle and write the client_id, client_secret, tenant_id, subscription_id to terraform.tfvars file
+az ad sp create-for-rbac --name "azure-cli-sp-$(date +%Y)-$(date +%m)-$(date +%d)-$(date +%H)-$(date +%M)-$(date +%S)" --role Contributor --scopes /subscriptions/"$SUBSCRIPTION_ID" --query "{client_id:appId, client_secret:password, tenant_id:tenant}" -o yaml >> temp.tfvars
+echo "subscription_id: $SUBSCRIPTION_ID" >> temp.tfvars
+
+#Format terraform.tfvars file
+sed 's/: /\t=\t"/; s/$/"/'  temp.tfvars > terraform.tfvars
+
+# Cleaning up temp files
+rm temp.tfvars

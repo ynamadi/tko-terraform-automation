@@ -1,12 +1,12 @@
 terraform {
   required_providers {
     tanzu-mission-control = {
-      source = "vmware/tanzu-mission-control"
-      version = "1.0.1"
+      source  = "vmware/tanzu-mission-control"
+      version = "1.1.0"
     }
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "=2.91.0"
+      version = "=3.23.0"
     }
   }
 }
@@ -20,15 +20,15 @@ provider "azurerm" {
   # the AzureRM Provider can be found here:
   # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs
 
-  subscription_id     = var.subscription_id
-  client_id           = var.appId
-  client_secret       = var.password
-  tenant_id           = var.tenant
+  subscription_id = var.subscription_id
+  client_id       = var.client_id
+  client_secret   = var.client_secret
+  tenant_id       = var.tenant_id
 }
 
 provider "tanzu-mission-control" {
-  endpoint            = var.vmw_host            # optionally use TMC_ENDPOINT env var
-  vmw_cloud_api_token = var.vmw_api_token# optionally use VMW_CLOUD_API_TOKEN env var
+  endpoint            = var.vmw_host      # optionally use TMC_ENDPOINT env var
+  vmw_cloud_api_token = var.vmw_api_token # optionally use VMW_CLOUD_API_TOKEN env var
 
   # if you are using dev or different csp endpoint, change the default value below
   # for production environments the csp_endpoint is console.cloud.vmware.com
