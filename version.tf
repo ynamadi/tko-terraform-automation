@@ -2,11 +2,11 @@ terraform {
   required_providers {
     tanzu-mission-control = {
       source  = "vmware/tanzu-mission-control"
-      version = "1.1.0"
+      version = "1.1.3"
     }
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "=3.23.0"
+      version = "=3.37.0"
     }
   }
 }
