@@ -2,11 +2,11 @@ terraform {
   required_providers {
     tanzu-mission-control = {
       source  = "vmware/tanzu-mission-control"
-      version = "1.1.3"
+      version = "1.1.4"
     }
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "=3.37.0"
+      version = "=3.43.0"
     }
   }
 }
@@ -34,3 +34,4 @@ provider "tanzu-mission-control" {
   # for production environments the csp_endpoint is console.cloud.vmware.com
   # vmw_cloud_api_endpoint = "console.cloud.vmware.com" or optionally use VMW_CLOUD_ENDPOINT env var
 }
+

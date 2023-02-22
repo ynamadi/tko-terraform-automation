@@ -35,7 +35,7 @@ variable "cluster_name" {
   type        = string
   sensitive   = true
   description = "AKS Cluster Name"
-  default     = "demo001"
+  default     = "test001"
 }
 
 variable "cluster_group_name" {
