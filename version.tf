@@ -2,11 +2,22 @@ terraform {
   required_providers {
     tanzu-mission-control = {
       source  = "vmware/tanzu-mission-control"
-      version = "1.1.4"
+      version = "1.1.5"
     }
     azurerm = {
       source  = "hashicorp/azurerm"
       version = "=3.43.0"
+    }
+    http = {
+      source = "hashicorp/http"
+      version = "3.2.1"
+    }
+    local = {
+      source = "hashicorp/local"
+    }
+    restapi = {
+      source = "Mastercard/restapi"
+      version = "1.18.0"
     }
   }
 }
@@ -27,7 +38,7 @@ provider "azurerm" {
 }
 
 provider "tanzu-mission-control" {
-  endpoint            = var.vmw_host      # optionally use TMC_ENDPOINT env var
+  endpoint            = var.tmc_host      # optionally use TMC_ENDPOINT env var
   vmw_cloud_api_token = var.vmw_api_token # optionally use VMW_CLOUD_API_TOKEN env var
 
   # if you are using dev or different csp endpoint, change the default value below
