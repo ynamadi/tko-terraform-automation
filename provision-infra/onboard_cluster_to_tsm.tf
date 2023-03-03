@@ -38,6 +38,8 @@ resource "null_resource" "kubectl" {
   depends_on = [
     azurerm_kubernetes_cluster.default,
     local_file.kube_config,
+    tanzu-mission-control_cluster_group.create_cluster_group_min_info,
+    tanzu-mission-control_cluster.attach_cluster_with_kubeconfig,
     data.http.exchange_token,
     data.http.onboarding_url
   ]
@@ -50,63 +52,56 @@ resource "null_resource" "kubectl" {
   }
 }
 
-locals {
-  access_token = jsondecode(data.http.exchange_token.response_body)["access_token"]
-}
-
-provider "restapi" {
-
-  uri                  = "https://${var.tsm_host}"
-  write_returns_object = true
-  debug                = true
-
-  headers = {
-    "csp-auth-token" = local.access_token
-  }
-
-  create_method  = "PUT"
-  update_method  = "PUT"
-  destroy_method = "PUT"
-}
-
-resource "restapi_object" "put_request" {
-  depends_on  = [
+data "http" "onboard_cluster_to_tsm" {
+  depends_on = [
+    azurerm_kubernetes_cluster.default,
+    local_file.kube_config,
+    tanzu-mission-control_cluster_group.create_cluster_group_min_info,
+    tanzu-mission-control_cluster.attach_cluster_with_kubeconfig,
     data.http.exchange_token,
     data.http.onboarding_url,
     null_resource.kubectl
   ]
+  provider = http-full
+  url             = "https://${var.tsm_host}/tsm/v1alpha1/clusters/${var.cluster_name}?createOnly=true"
+  request_headers = {
+    csp-auth-token = jsondecode(data.http.exchange_token.response_body)["access_token"]
+    Content-Type   = "application/json"
+  }
 
-  path = "/tsm/v1alpha1/clusters/${var.cluster_name}?createOnly=true"
-  data = "{\n    \"displayName\": \"${var.cluster_name}\",\n    \"description\": \"Test TKG cluster\",\n    \"tags\": [\n        \"tf-demo\"\n    ],\n    \"labels\": [\n        {\n            \"key\": \"Proxy Location\",\n            \"value\": \"aviproxy\"\n        }\n    ],\n    \"autoInstallServiceMesh\": true,\n    \"enableNamespaceExclusions\": true,\n    \"enableInternalGateway\": true,\n    \"namespaceExclusions\": [\n        {\n            \"type\": \"EXACT\",\n            \"match\": \"vmware-system-tsm\"\n        },\n        {\n            \"type\": \"EXACT\",\n            \"match\": \"vmware-system-tmc\"\n        }\n    ],\n    \"autoInstallServiceMeshConfig\": {\n        \"restrictDefaultExternalAccess\": false\n    }\n}"
+  request_body = jsonencode({"displayName": var.cluster_name, "description": "Test TKG cluster", "tags": ["tf-demo"], "labels": [{"key": "Proxy Location", "value": "aviproxy"}], "autoInstallServiceMesh": true, "enableNamespaceExclusions": true, "enableInternalGateway": true, "namespaceExclusions": [{"type": "EXACT", "match": "vmware-system-tsm"}, {"type": "EXACT", "match": "vmware-system-tmc"}], "autoInstallServiceMeshConfig": {"restrictDefaultExternalAccess": false}})
+  method       = "PUT"
 }
 
-
-output "token" {
-  depends_on = [
+output "onboard_cluster_to_tsm" {
+  depends_on  = [
     azurerm_kubernetes_cluster.default,
     local_file.kube_config,
+    tanzu-mission-control_cluster_group.create_cluster_group_min_info,
+    tanzu-mission-control_cluster.attach_cluster_with_kubeconfig,
     data.http.exchange_token,
     data.http.onboarding_url,
-    restapi_object.put_request
+    null_resource.kubectl,
+    data.http.onboard_cluster_to_tsm
   ]
-
-  value       = jsondecode(restapi_object.put_request.api_response)["token"]
+  value       = jsondecode(data.http.onboard_cluster_to_tsm.response_body)["token"]
   sensitive   = true
-  description = "Onboarding to TSM response"
+  description = "URL for Onboarding to TSM"
 }
-
 
 resource "null_resource" "tsm_secret" {
   depends_on = [
     azurerm_kubernetes_cluster.default,
     local_file.kube_config,
+    tanzu-mission-control_cluster_group.create_cluster_group_min_info,
+    tanzu-mission-control_cluster.attach_cluster_with_kubeconfig,
     data.http.exchange_token,
     data.http.onboarding_url,
     null_resource.kubectl,
-    restapi_object.put_request
+    data.http.onboard_cluster_to_tsm
   ]
   provisioner "local-exec" {
-    command     = "kubectl -n vmware-system-tsm create secret generic cluster-token --from-literal=token=${jsondecode(restapi_object.put_request.api_response)["token"]} --kubeconfig <(echo $KUBECONFIG | base64 --decode)"
+    command     = "kubectl -n vmware-system-tsm create secret generic cluster-token --from-literal=token=${jsondecode(data.http.onboard_cluster_to_tsm.response_body)["token"]} --kubeconfig <(echo $KUBECONFIG | base64 --decode)"
     interpreter = ["/bin/bash", "-c"]
     environment = {
       KUBECONFIG = base64encode(azurerm_kubernetes_cluster.default.kube_config_raw)

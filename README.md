@@ -1,8 +1,60 @@
-# Attaching an AKS Cluster to Tanzu Mission Control
+# Attaching an AKS Cluster to Tanzu Mission Control, and Onboarding to Tanzu Service Mesh
 
-This script is designed to create an AKS Cluster and attach it to Tanzu Mission Control
+This script is designed to create an AKS Cluster, attach to Tanzu Mission Control, then Onboard to Tanzu Service Mesh
 
-#### Note: TMC provider requires Terraform version 0.15 or later, the provider supports static credentials passed to the provider or environment variables.
+#### Note: TMC provider requires Terraform version 0.15 or later, the provider supports static credentials passed to the provider or environment variables. Also, the CSP TOKEN generate from VMWare Cloud Services needs to have access to both TMC & TSM
+
+#### Step 1: Execute the Terraform scripts to provision an AKS, then attach to TMC and Onboard to TSM you need to switch directories
+```shell
+cd provision-infra
+```
+
+#### Step 2: Init
+```shell
+terraform init -upgrade 
+```
+
+#### Step 2: Plan
+```shell
+terraform plan -var vmw_api_token="${VMWARE_CSP_TOKEN}"
+```
+
+#### Step 3: Apply 
+```shell
+terraform apply -var vmw_api_token="${VMWARE_CSP_TOKEN}" --auto-approve
+```
+
+#### To clean up you will need to execute the following
+
+#### Step 1 (Switch to destroy-infra directory)
+```shell
+cd destroy-infra
+```
+
+#### Step 2: Init
+```shell
+terraform init -upgrade 
+```
+
+#### Step 3: Plan
+```shell
+terraform plan -var vmw_api_token="${VMWARE_CSP_TOKEN}"
+```
+
+#### Step 4: Apply
+```shell
+terraform apply -var vmw_api_token="${VMWARE_CSP_TOKEN}" --auto-approve
+```
+
+#### Step 5 (Switch to provision-infra directory)
+```shell
+cd ..
+cd provision-infra
+```
+#### Step 6: Destroy
+```shell
+terraform destroy -var vmw_api_token="${VMWARE_CSP_TOKEN}" --auto-approve
+```
 
 ### **Authenticating to TMC**
 

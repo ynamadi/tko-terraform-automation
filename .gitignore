@@ -34,3 +34,8 @@ override.tf.json
 /.terraform.lock.hcl
 /config-aks-cluster.yaml
 /*_config.yaml
+/provision-infra/terraform.tfvars
+/destroy-infra/.terraform.lock.hcl
+/provision-infra/.terraform.lock.hcl
+/provision-infra/*_config.yaml
+/start.sh
