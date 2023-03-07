@@ -76,7 +76,16 @@ terraform apply -var vmw_api_token="${CSP_TOKEN}" --auto-approve
 ```
 
 ### Destroy Provisioned Infrastructure (Remove cluster from TSM & TMC, Delete Cluster)
-#### Step 1: Terraform Destroy
+#### Step 1: Remove Cluster from TSM
 ```shell
+cd remove_cluster_from_tsm
+terraform plan -var vmw_api_token="${CSP_TOKEN}"
+terraform apply -var vmw_api_token="${CSP_TOKEN}" --auto-approve
+terraform destroy -var vmw_api_token="${CSP_TOKEN}" --auto-approve
+```
+
+#### Step 1: Detach cluster from TMC and Delete Cluster
+```shell
+cd ..
 terraform destroy -var vmw_api_token="${CSP_TOKEN}" --auto-approve
 ```

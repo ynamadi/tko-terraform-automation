@@ -38,3 +38,8 @@ override.tf.json
 
 /iac/azure/.terraform.lock.hcl
 /iac/azure/.terraform/
+/iac/azure/remove_cluster_from_tsm/destroy.json
+/iac/azure/*_config.yaml
+/iac/azure/token.json
+/iac/azure/remove_cluster_from_tsm/.terraform/
+/iac/azure/remove_cluster_from_tsm/.terraform.lock.hcl
