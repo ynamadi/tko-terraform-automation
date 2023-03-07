@@ -22,7 +22,7 @@ variable "subscription_id" {
 variable "tmc_host" {
   type        = string
   description = "TMC Host"
-  default = "tanzugreatlakesseorg.tmc.cloud.vmware.com"
+  default = "ameresetsmapisec.tmc.cloud.vmware.com"
 }
 
 variable "vmw_api_token" {
@@ -52,6 +52,6 @@ variable "vmware_cloud_host" {
 
 variable "tsm_host" {
   type        = string
-  default = "prod-2.nsxservicemesh.vmware.com"
+  default = "prod-4.nsxservicemesh.vmware.com"
   description = "Host for TSM Cloud"
 }

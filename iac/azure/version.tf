@@ -8,25 +8,14 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "=3.43.0"
     }
-    http-full = {
-      source = "salrashid123/http-full"
-      version = "1.3.1"
+    http = {
+      source = "hashicorp/http"
+      version = "3.2.1"
     }
-#    http = {
-#      source = "hashicorp/http"
-#      version = "3.2.1"
-#    }
-    local = {
-      source = "hashicorp/local"
-    }
-#    restapi = {
-#      source = "Mastercard/restapi"
-#      version = "1.18.0"
-#    }
   }
 }
 
-provider "http-full" {}
+
 # Configure the Microsoft Azure Provider
 provider "azurerm" {
   features {}
