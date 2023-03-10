@@ -43,4 +43,3 @@ URL=$(curl -X GET https://"$TSM_URL"/tsm/v1alpha1/jobs/"$ID"/download \
 # Removing TSM components from cluster
 echo "Removing TSM components from cluster $1 using url $URL"
 kubectl delete --ignore-not-found=true -f "$URL"
-echo 'Cluster '"${CLUSTER_NAME}"' has been Removed from TSM'
