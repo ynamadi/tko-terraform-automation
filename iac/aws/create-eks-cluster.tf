@@ -51,7 +51,7 @@ resource "tanzu-mission-control_ekscluster" "tf_eks_cluster" {
         role_arn       = var.aws_worker_arn
         ami_type       = "AL2_x86_64"
         capacity_type  = "ON_DEMAND"
-        root_disk_size = 40 
+        root_disk_size = 40
         tags           = { "clusterType" : "test" }
         node_labels    = { "nodeType" : "linux" }
 
