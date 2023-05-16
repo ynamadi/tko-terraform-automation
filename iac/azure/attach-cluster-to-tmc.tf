@@ -28,5 +28,5 @@ resource "tanzu-mission-control_cluster" "attach_cluster_with_kubeconfig" {
     cluster_group = var.cluster_group_name
   }
 
-  ready_wait_timeout = "15m"
+  ready_wait_timeout = "5m"
 }
