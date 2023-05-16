@@ -22,7 +22,7 @@ variable "subscription_id" {
 variable "tmc_host" {
   type        = string
   description = "TMC Host"
-  default = "ameresetsmapisec.tmc.cloud.vmware.com"
+  default = "tsmentmapbu.tmc.cloud.vmware.com"
 }
 
 variable "vmw_api_token" {
@@ -35,7 +35,7 @@ variable "cluster_name" {
   type        = string
   sensitive   = true
   description = "AKS Cluster Name"
-  default     = "test001"
+  default     = "prod001-digital-bu-aks-us-east"
 }
 
 variable "cluster_group_name" {
@@ -52,6 +52,6 @@ variable "vmware_cloud_host" {
 
 variable "tsm_host" {
   type        = string
-  default = "prod-4.nsxservicemesh.vmware.com"
+  default = "prod-4-1.nsxservicemesh.vmware.com"
   description = "Host for TSM Cloud"
 }

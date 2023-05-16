@@ -43,3 +43,4 @@ override.tf.json
 /iac/azure/token.json
 /iac/azure/remove_cluster_from_tsm/.terraform/
 /iac/azure/remove_cluster_from_tsm/.terraform.lock.hcl
+/iac/aws/terraform.tfvars
